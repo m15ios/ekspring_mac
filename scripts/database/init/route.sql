@@ -1,0 +1,176 @@
+-- create table psv_route
+-- (
+--     id               uuid                  not null
+--         constraint pk_psv_route
+--             primary key,
+--     version          numeric(10) default 0 not null,
+--     external_id      varchar(255),
+--     short_name       varchar(255)          not null,
+--     long_name        varchar(4000)         not null,
+--     description      text,
+--     transport_type   numeric(19)           not null,
+--     route_type       numeric(10),
+--     agency           numeric(19)           not null,
+--     agency_route_ref varchar(255)
+-- );
+--
+-- comment on table psv_route is 'Маршрут';
+--
+-- comment on column psv_route.version is 'Служебное';
+--
+-- comment on column psv_route.external_id is 'Служебное';
+--
+-- comment on column psv_route.short_name is 'Короткое наименование маршрута (обычно номер)';
+--
+-- comment on column psv_route.long_name is 'Длинное наименование маршрута (обычно перечисление ключевых пунктов следования)';
+--
+-- comment on column psv_route.description is 'Описание (полезная информация, комментарии к маршруту)';
+--
+-- comment on column psv_route.transport_type is 'Тип ТС';
+--
+-- comment on column psv_route.route_type is 'Перечисление, вид маршрута (Частный, Муниципальный, Межмуниципальный, Межрегиональный)';
+--
+-- comment on column psv_route.agency is 'Владелец маршрута (заказчик), уполномоченный орган исполнительной власти для гос. маршрутов, прочие организации для частных маршрутов';
+--
+-- comment on column psv_route.agency_route_ref is 'Номер в реестре у владельца маршрута';
+--
+-- create index ie1_psv_route
+--     on psv_route (short_name);
+--
+-- create index ie2_psv_route
+--     on psv_route (external_id);
+--
+-- create index ie3_psv_route
+--     on psv_route (agency, agency_route_ref);
+--
+-- create index if1_psv_route_transport_type
+--     on psv_route (transport_type);
+--
+-- create index if2_psv_route_agency
+--     on psv_route (agency);
+--
+-- -------------------------------------------------------------------------
+--
+-- create table disp_route
+-- (
+--     id                        numeric(19)               not null
+--         constraint pk_route
+--             primary key,
+--     route_number              varchar(10),
+--     name                      varchar(100),
+--     uin                       numeric(10),
+--     transport_type            numeric(19)               not null,
+--     version                   numeric(10) default 0     not null,
+--     client                    numeric(19),
+--     category                  numeric(10),
+--     lagging_start_threshold   numeric(10) default 10    not null,
+--     transport_start_count     numeric(10) default 3     not null,
+--     lagging_stop_threshold    numeric(10) default 10    not null,
+--     transport_stop_count      numeric(10) default 3     not null,
+--     late_time_percent         numeric(10) default 50    not null,
+--     nonrace_stop_norm_percent numeric(10) default 50    not null,
+--     route_number_int          numeric(10),
+--     external_id               varchar(1024),
+--     path_open_date            date,
+--     path_order_open           varchar(255),
+--     path_order_open_content   varchar(4000),
+--     path_order_open_date      date,
+--     route_reg_num             varchar(100),
+--     route_type                numeric(10),
+--     district                  numeric(19),
+--     official_agency           varchar(4000),
+--     boarding_order            numeric(10),
+--     vehicle_category          numeric(10),
+--     acea_eco_agreement        numeric(10),
+--     removed                   boolean,
+--     circular                  boolean     default false not null,
+--     regulation                boolean     default false not null,
+--     urban                     boolean     default false not null,
+--     night                     boolean     default false not null,
+--     ds_traffic_control        boolean     default true  not null,
+--     kp_traffic_control        boolean     default false not null,
+--     portal_visibility         boolean     default true,
+--     vehicle_category_type     numeric(19),
+--     notes_quality             varchar(255),
+--     payment_conditions        numeric(19),
+--     wheelchair                boolean,
+--     emergency                 numeric(19),
+--     emergency_action_type     numeric(19),
+--     owner                     numeric(19)
+-- );
+--
+-- comment on table disp_route is 'Маршруты';
+--
+-- comment on column disp_route.route_number is 'Номер маршрута';
+--
+-- comment on column disp_route.name is 'Наименование';
+--
+-- comment on column disp_route.uin is 'Уникальный номер';
+--
+-- comment on column disp_route.transport_type is 'Тип ТС';
+--
+-- comment on column disp_route.version is 'Служебное';
+--
+-- comment on column disp_route.client is 'Служебное';
+--
+-- comment on column disp_route.category is 'Категория';
+--
+-- comment on column disp_route.lagging_start_threshold is 'Служеное';
+--
+-- comment on column disp_route.transport_start_count is 'Служебное';
+--
+-- comment on column disp_route.lagging_stop_threshold is 'Служебное';
+--
+-- comment on column disp_route.transport_stop_count is 'Служебное';
+--
+-- comment on column disp_route.late_time_percent is 'Служебное';
+--
+-- comment on column disp_route.nonrace_stop_norm_percent is 'Процент от нормы на оборот для предоставления обедов, разрывов, смен';
+--
+-- comment on column disp_route.route_number_int is 'Служебное';
+--
+-- comment on column disp_route.external_id is 'Служебное';
+--
+-- comment on column disp_route.path_open_date is 'Дата открытия';
+--
+-- comment on column disp_route.path_order_open is 'Приказ об открытии';
+--
+-- comment on column disp_route.path_order_open_content is 'Содержание приказа об открытии';
+--
+-- comment on column disp_route.path_order_open_date is 'Дата приказа об открытии';
+--
+-- alter table disp_route
+--     owner to postgres;
+--
+-- create unique index ak1_disp_route
+--     on disp_route (route_number, transport_type, client);
+--
+-- create unique index ak2_disp_route
+--     on disp_route (uin);
+--
+-- create unique index idxe_route
+--     on disp_route (external_id);
+--
+-- create index ie1_disp_route
+--     on disp_route (route_number);
+--
+-- create index if2_disp_route
+--     on disp_route (client);
+--
+-- create index if3_disp_route
+--     on disp_route (district);
+--
+-- create index if4_disp_route
+--     on disp_route (emergency);
+--
+-- create index if5_disp_route
+--     on disp_route (emergency_action_type);
+--
+-- create index if6_disp_route
+--     on disp_route (payment_conditions);
+--
+-- create index if7_disp_route
+--     on disp_route (vehicle_category_type);
+--
+-- create index if_route_transport_type
+--     on disp_route (transport_type);

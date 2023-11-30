@@ -1,0 +1,8 @@
+-- create table ek_tests
+-- (
+--     id          uuid      not null
+--         constraint pk_ek_tests
+--             primary key,
+--     description text,
+--     create_date timestamp not null
+-- );
