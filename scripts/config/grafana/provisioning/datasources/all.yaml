@@ -7,3 +7,10 @@ datasources:
     access: proxy
     url: http://prometheus:9090
     isDefault: true
+
+#  - name: DB
+#    label: DB
+#    type: DB
+#    access: proxy
+#    url: http://db:5432
+#    isDefault: true

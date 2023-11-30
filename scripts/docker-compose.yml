@@ -52,15 +52,14 @@ services:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
     restart: always
 
-#  actionlog:
-#    image: app/action_log
-#    build:
-#      context: backend
-#      dockerfile: ../ActionLog/Dockerfile
+  app:
+    build:
+      context: ./scripts/app
+      dockerfile: Dockerfile
 #    network_mode: host
-#    container_name: action-log-container
-#    ports:
-#      - "8081:8081"
+    container_name: app-container
+    ports:
+      - "8102:8102"
 
 
 #  rabbitmq:

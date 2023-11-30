@@ -4,7 +4,7 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     scrape_interval: 2s
     static_configs:
-      - targets: ['localhost:8100', 'localhost:8101']
+      - targets: ['localhost:8102'] #, 'localhost:8080']
 
 #  - job_name: 'Health for PP'
 #    metrics_path: '/actuator/health'
