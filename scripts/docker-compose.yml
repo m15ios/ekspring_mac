@@ -32,7 +32,7 @@ services:
 
   grafana:
     build: 'config/grafana'
-    network_mode: host
+#    network_mode: host
     container_name: grafana-container
     restart: unless-stopped
     ports:
@@ -43,14 +43,14 @@ services:
 
   prometheus:
     image: prom/prometheus
-    network_mode: host
+#    network_mode: host
     container_name: prometheus-container
     ports:
       - "9090:9090"
     volumes:
       - ./prometheus:/etc/prometheus/
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
-#    restart: always
+    restart: always
 
 #  actionlog:
 #    image: app/action_log
