@@ -1,9 +1,19 @@
+logging:
+  level:
+    ru.pt.transport.actionlog: DEBUG
+
 
 server:
   port: 8102
 
+spring:
+  datasource:
+    url: jdbc:postgresql://db:5432/ekspg
+    username: eku01
+    password: tnG4-gr6D
+    driver-class-name: org.postgresql.Driver
 
-# ?????????? ? ??????? ??? actuator
+# actuator
 info:
   app:
     name: First test service
@@ -18,11 +28,9 @@ management:
   info:
     env:
       enabled: true
-  #  ??????????? health
   endpoint:
     health:
       show-details: always
-  #  ????????? ????????? ? ???????
   endpoints:
     web:
       exposure:

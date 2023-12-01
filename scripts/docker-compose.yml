@@ -54,8 +54,8 @@ services:
 
   app:
     build:
-      context: ./scripts/app
-      dockerfile: Dockerfile
+      context: ./..
+      dockerfile: ./scripts/app/Dockerfile
 #    network_mode: host
     container_name: app-container
     ports:

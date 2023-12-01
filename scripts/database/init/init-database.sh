@@ -4,14 +4,25 @@ set -e
 # code template
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
 
-  create table ek_tests
-  (
-      id          uuid      not null
-          constraint pk_ek_tests
-              primary key,
-      description text,
-      create_date timestamp not null
-  );
+CREATE TABLE IF NOT EXISTS public.feed_links
+(
+    id    uuid not null
+          constraint pk_ek_tests primary key,
+    url_source text,
+    create_date timestamp           not null,
+    state text                      not null,
+    duration_date timestamp         null,
+    count_attempts smallint default 0 not null,
+    last_date_attempt timestamp     null,
+
+    constraint ckc$state$feed_links
+        check (state in (
+                'CREATED',
+                'INLINE',
+                'FAILED'
+            )
+        )
+);
 
 
 
