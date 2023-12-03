@@ -1,22 +1,21 @@
 package ru.m15.ekspring.api.controllers;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.m15.ekspring.dto.RequestFeed;
+import ru.m15.ekspring.dto.ResponseCommon;
 
 import java.util.List;
 
 
-
-
 @RestController
-@RequestMapping("v1/urls")
-interface FeedsController {
-    /*
-    func
+@RequestMapping("/v1/feeds")
+public interface FeedsController {
 
-    Add
-            List
-    State
-                    Delete
-*/
+    @PostMapping
+    ResponseCommon addFeed( @RequestBody RequestFeed feed );
+
+
 }

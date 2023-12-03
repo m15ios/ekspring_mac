@@ -1,6 +1,7 @@
 logging:
   level:
-    ru.pt.transport.actionlog: DEBUG
+    ru.m15.ekspring: DEBUG
+    org.springframework.web: TRACE
 
 
 server:

@@ -25,7 +25,7 @@ public class FeedLink {
     @Column(nullable = false)
     private String urlSource;
     private LocalDateTime createDate;
-    @Enumerated
+    @Enumerated(value=EnumType.STRING)
     private FeedState state;
     private LocalDateTime durationDate;
     private Integer countAttempts;
