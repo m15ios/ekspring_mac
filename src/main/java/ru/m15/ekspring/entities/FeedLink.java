@@ -3,7 +3,7 @@ package ru.m15.ekspring.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+//import org.springframework.boot.autoconfigure.domain.EntityScan;
 import ru.m15.ekspring.entities.enums.FeedState;
 
 import java.time.LocalDateTime;

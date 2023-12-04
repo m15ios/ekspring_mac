@@ -21,10 +21,9 @@ public class FeedsControllerImpl implements FeedsController {
     @Override
     public ResponseCommon addFeed(RequestFeed feed) {
         log.info("addFeedController is executing");
-        var response = this.service.addFeed( feed );
+        return this.service.addFeed( feed );
         // mock answer
-        // var response = new ResponseCommon( 200, "vse normalno" );
-        return response;
+        // return new ResponseCommon( 200, "vse normalno" )я
     }
 
 }
