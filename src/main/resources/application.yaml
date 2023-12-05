@@ -16,6 +16,12 @@ spring:
 
   flyway:
     baselineOnMigrate: true
+    url: jdbc:postgresql://db:5432/ekspg
+    user: eku01
+    password: tnG4-gr6D
+    driver-class-name: org.postgresql.Driver
+    locations: classpath:db/migration
+
 
 # actuator
 info:
