@@ -60,7 +60,9 @@ services:
     container_name: app-container
     ports:
       - "8102:8102"
-
+    depends_on:
+      db:
+        condition: service_healthy
 
 #  rabbitmq:
 #    image: rabbitmq:3-management

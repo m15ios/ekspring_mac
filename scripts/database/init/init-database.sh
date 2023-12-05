@@ -25,5 +25,4 @@ CREATE TABLE IF NOT EXISTS public.feed_links
 );
 
 
-
 EOSQL
