@@ -11,9 +11,13 @@ import lombok.experimental.Accessors;
  */
 
 @Data
-@Builder
+//@Builder
 @Accessors(chain = true)
 public class RequestFeed {
+
+    public RequestFeed(){
+
+    }
 
     @NotBlank
     private String feedUrl;
