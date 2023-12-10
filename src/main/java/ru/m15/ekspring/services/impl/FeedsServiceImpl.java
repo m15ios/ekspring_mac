@@ -1,7 +1,9 @@
 package ru.m15.ekspring.services.impl;
 
 //import jakarta.validation.constraints.Null;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+import ru.m15.ekspring.config.RabbitConfig;
 import ru.m15.ekspring.dto.RequestFeed;
 import ru.m15.ekspring.dto.ResponseCommon;
 import ru.m15.ekspring.entities.FeedLink;
@@ -10,6 +12,7 @@ import ru.m15.ekspring.repositories.FeedLinkRepository;
 import ru.m15.ekspring.services.FeedsService;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 //import java.sql.Timestamp;
 
@@ -21,10 +24,12 @@ import java.time.LocalDateTime;
 public class FeedsServiceImpl implements FeedsService {
 
     private final FeedLinkRepository repository;
+    private final RabbitTemplate rabbitTemplate;
 
     // autolink by Spring
-    FeedsServiceImpl( FeedLinkRepository repository ){
+    FeedsServiceImpl( FeedLinkRepository repository, RabbitTemplate rabbitTemplate ){
         this.repository = repository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -43,10 +48,21 @@ public class FeedsServiceImpl implements FeedsService {
             feedData.setDurationDate(feedDurationTime);
         }
         var result = this.repository.save( feedData );
+        this.sendMessage(result.getId());
         return new ResponseCommon(
             200,
             "feed saved to" + result.getId().toString()
             );
+    }
+
+    private void sendMessageToRabbit(UUID message){
+        String routingKey = RabbitConfig.rabbitQueue;
+        rabbitTemplate.convertAndSend(routingKey, message.toString());
+    }
+
+
+    public void sendMessage(UUID message) {
+        this.sendMessageToRabbit(message);
     }
 
 }

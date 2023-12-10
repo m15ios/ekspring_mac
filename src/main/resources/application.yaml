@@ -22,6 +22,16 @@ spring:
     driver-class-name: org.postgresql.Driver
     locations: classpath:db/migration
 
+  #common setting for ampq protocol (rabbit and kafka)
+  jms:
+    pub-sub-domain: true
+
+  rabbitmq:
+    username: admin
+    password: 12345
+    host: rabbitmq
+    port: 5672
+
 
 # actuator
 info:
@@ -45,4 +55,6 @@ management:
     web:
       exposure:
         include: info,health,prometheus
+
+
 
