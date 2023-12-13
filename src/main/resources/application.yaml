@@ -33,6 +33,12 @@ spring:
     port: 5672
 
 
+minio:
+  endpoint: http://localhost:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+
+
 # actuator
 info:
   app:
