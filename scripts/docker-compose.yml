@@ -28,6 +28,9 @@ services:
       driver: "json-file"
       options:
         max-size: "50m"
+    networks:
+      - custom_network
+
 
 
   grafana:
@@ -40,6 +43,9 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - custom_network
+
 
   prometheus:
     image: prom/prometheus
@@ -51,6 +57,9 @@ services:
       - ./prometheus:/etc/prometheus/
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
     restart: always
+    networks:
+      - custom_network
+
 
   app:
     build:
@@ -63,6 +72,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - custom_network
+
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -80,6 +92,9 @@ services:
       driver: "json-file"
       options:
         max-size: "50m"
+    networks:
+      - custom_network
+
 
   minio:
     image: minio/minio:latest
@@ -97,7 +112,11 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
+    networks:
+      - custom_network
+
 
 
 networks:
-  monitoring:
+  custom_network:
+    driver: bridge

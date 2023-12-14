@@ -34,7 +34,7 @@ spring:
 
 
 minio:
-  endpoint: http://localhost:9000
+  endpoint: http://minio:9000
   accessKey: minioadmin
   secretKey: minioadmin
 
