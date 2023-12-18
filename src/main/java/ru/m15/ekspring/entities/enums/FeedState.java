@@ -3,5 +3,10 @@ package ru.m15.ekspring.entities.enums;
 public enum FeedState {
     CREATED,
     INLINE,
-    FAILED
+    SAVED,
+    IN_PARSE,
+    PARSED,
+    FAILED,
+    FINISH,
+    WAITING
 }

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS public.feed_links
     count_attempts smallint default 0 not null,
     last_date_attempt timestamp     null,
 
-    constraint ckc$state$feed_links
+    constraint ckc
         check (state in (
                 'CREATED',
                 'INLINE',
