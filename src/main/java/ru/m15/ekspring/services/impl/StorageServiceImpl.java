@@ -1,15 +1,15 @@
 package ru.m15.ekspring.services.impl;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import io.minio.*;
+import io.minio.errors.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.m15.ekspring.services.StorageService;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 @Slf4j
@@ -50,7 +50,24 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public String loadData(UUID uuid) {
-        return null;
+        GetObjectArgs args = GetObjectArgs.builder()
+                .region("eu-central-1")
+                .bucket(this.bucketName)
+                .object(uuid.toString())
+                .build();
+        StringBuilder data = new StringBuilder();
+        try (InputStream stream = minioClient.getObject(args);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                data.append(line).append("\n");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return data.toString().trim();
+
     }
 
     @Override
