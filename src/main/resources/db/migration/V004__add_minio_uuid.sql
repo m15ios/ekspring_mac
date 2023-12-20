@@ -1,0 +1,1 @@
+alter table public.feed_links add minio uuid;

@@ -53,6 +53,7 @@ public class GrabberServiceImpl {
             UUID uid = UUID.randomUUID();
             storage.saveData( uid, data );
             feedLink.setState( FeedState.SAVED );
+            feedLink.setMinio( uid );
             repository.save(feedLink);
             // push to second rabbit
         } catch ( IOException e ){

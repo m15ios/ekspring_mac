@@ -30,4 +30,5 @@ public class FeedLink {
     private LocalDateTime durationDate;
     private Integer countAttempts;
     private LocalDateTime lastDateAttempt;
+    private UUID minio;
 }
