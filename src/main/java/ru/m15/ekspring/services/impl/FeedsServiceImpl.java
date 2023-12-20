@@ -1,6 +1,7 @@
 package ru.m15.ekspring.services.impl;
 
 //import jakarta.validation.constraints.Null;
+import org.intellij.lang.annotations.Language;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import ru.m15.ekspring.config.RabbitConfig;
@@ -10,6 +11,7 @@ import ru.m15.ekspring.entities.FeedLink;
 import ru.m15.ekspring.entities.enums.FeedState;
 import ru.m15.ekspring.repositories.FeedLinkRepository;
 import ru.m15.ekspring.services.FeedsService;
+import ru.m15.ekspring.utils.Hash;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -32,15 +34,35 @@ public class FeedsServiceImpl implements FeedsService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+
     @Override
     public ResponseCommon addFeed( RequestFeed feed ) {
+
+        // language=json
+        var links =     "[\n" +
+                        "  {\n" +
+                        "    \"link\": \"/home\",\n" +
+                        "    \"body\": \"test body\",\n" +
+                        "    \"meta\": \"meta test\",\n" +
+                        "    \"type\": \"meta types\"\n" +
+                        "  },\n" +
+                        "  {\n" +
+                        "    \"link\": \"/contacts\",\n" +
+                        "    \"body\": \"test contacts body\",\n" +
+                        "    \"meta\": \"meta contacts test\",\n" +
+                        "    \"type\": \"meta contacts types\"\n" +
+                        "  }\n" +
+                        "]";
+
         var feedData = new FeedLink()
                 .setUrlSource( feed.getFeedUrl() )
                 .setState( FeedState.CREATED )
                 .setCreateDate( LocalDateTime.now() )
                 .setDurationDate( LocalDateTime.now() )
                 .setCountAttempts( 0 )
-                .setLastDateAttempt( null );
+                .setLastDateAttempt( null )
+                .setUrlHash( Hash.hashURL(feed.getFeedUrl()) )
+                .setLinks( links );
         var feedDuration = feed.getDurationTime();
         if( feedDuration != null ) {
             // feedDuration will be such like "2018-05-05T11:50:55"

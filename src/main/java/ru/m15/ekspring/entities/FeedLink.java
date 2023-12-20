@@ -1,9 +1,13 @@
 package ru.m15.ekspring.entities;
 
+import io.minio.messages.JsonType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 //import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 import ru.m15.ekspring.entities.enums.FeedState;
 
 import java.time.LocalDateTime;
@@ -31,4 +35,10 @@ public class FeedLink {
     private Integer countAttempts;
     private LocalDateTime lastDateAttempt;
     private UUID minio;
+    @Column(name="url_hash")
+    private String urlHash;
+    //@Type(JsonLinks.class)
+    @Column(columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private String links;
 }
