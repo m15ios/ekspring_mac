@@ -49,7 +49,7 @@ public class GrabberServiceImpl {
     private void downloadByUrlAndSave( FeedLink feedLink ){
         String url = feedLink.getUrlSource();
         try {
-            String data = Jsoup.connect(url).get().text();
+            String data = Jsoup.connect(url).get().html();
             UUID uid = UUID.randomUUID();
             storage.saveData( uid, data );
             feedLink.setState( FeedState.SAVED );

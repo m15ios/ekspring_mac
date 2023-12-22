@@ -38,6 +38,7 @@ public class FeedsServiceImpl implements FeedsService {
     @Override
     public ResponseCommon addFeed( RequestFeed feed ) {
 
+        /*
         // language=json
         var links =     "[\n" +
                         "  {\n" +
@@ -53,6 +54,7 @@ public class FeedsServiceImpl implements FeedsService {
                         "    \"type\": \"meta contacts types\"\n" +
                         "  }\n" +
                         "]";
+        */
 
         var feedData = new FeedLink()
                 .setUrlSource( feed.getFeedUrl() )
@@ -61,8 +63,8 @@ public class FeedsServiceImpl implements FeedsService {
                 .setDurationDate( LocalDateTime.now() )
                 .setCountAttempts( 0 )
                 .setLastDateAttempt( null )
-                .setUrlHash( Hash.hashURL(feed.getFeedUrl()) )
-                .setLinks( links );
+                .setUrlHash( Hash.hashURL(feed.getFeedUrl()) );
+        //        .setLinks( links );
         var feedDuration = feed.getDurationTime();
         if( feedDuration != null ) {
             // feedDuration will be such like "2018-05-05T11:50:55"
