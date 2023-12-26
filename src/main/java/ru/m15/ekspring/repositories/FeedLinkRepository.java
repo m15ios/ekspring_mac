@@ -15,4 +15,6 @@ public interface FeedLinkRepository extends JpaRepository<FeedLink, UUID> {
 
     List<FeedLink> findByState( FeedState state );
 
+    List<FeedLink> findByUrlHash( String hash );
+
 }

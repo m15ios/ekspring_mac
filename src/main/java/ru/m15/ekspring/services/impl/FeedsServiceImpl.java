@@ -37,25 +37,6 @@ public class FeedsServiceImpl implements FeedsService {
 
     @Override
     public ResponseCommon addFeed( RequestFeed feed ) {
-
-        /*
-        // language=json
-        var links =     "[\n" +
-                        "  {\n" +
-                        "    \"link\": \"/home\",\n" +
-                        "    \"body\": \"test body\",\n" +
-                        "    \"meta\": \"meta test\",\n" +
-                        "    \"type\": \"meta types\"\n" +
-                        "  },\n" +
-                        "  {\n" +
-                        "    \"link\": \"/contacts\",\n" +
-                        "    \"body\": \"test contacts body\",\n" +
-                        "    \"meta\": \"meta contacts test\",\n" +
-                        "    \"type\": \"meta contacts types\"\n" +
-                        "  }\n" +
-                        "]";
-        */
-
         var feedData = new FeedLink()
                 .setUrlSource( feed.getFeedUrl() )
                 .setState( FeedState.CREATED )
@@ -64,7 +45,6 @@ public class FeedsServiceImpl implements FeedsService {
                 .setCountAttempts( 0 )
                 .setLastDateAttempt( null )
                 .setUrlHash( Hash.hashURL(feed.getFeedUrl()) );
-        //        .setLinks( links );
         var feedDuration = feed.getDurationTime();
         if( feedDuration != null ) {
             // feedDuration will be such like "2018-05-05T11:50:55"

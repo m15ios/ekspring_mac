@@ -40,6 +40,7 @@ public class StorageServiceImpl implements StorageService {
                     .bucket( this.bucketName )
                     .stream( bais, bais.available(), -1)
                     .object( uuid.toString() )
+                    .contentType( "text/html" )
                     .build();
             minioClient.putObject(args);
         } catch ( Exception e) {

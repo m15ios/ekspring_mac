@@ -26,6 +26,9 @@ public class ParserLinksServiceImpl implements ParsingAndAnalyseService {
     private final StorageService storageService;
     private final FeedLinkRepository repository;
 
+    private final LinkAnalysesImpl linkAnalyses;
+
+
     @Override
     public void parsing(FeedLink feedLink) {
         UUID minioId = feedLink.getMinio();
@@ -42,6 +45,9 @@ public class ParserLinksServiceImpl implements ParsingAndAnalyseService {
                     feedLink.setLinks( jsonString );
                     repository.save( feedLink );
                     log.info( "\n\n\n\n ------------------- feedLink saved -------------- \n\n\n\n" );
+
+                    linkAnalyses.add(feedLink);
+
                 }
 
             }
