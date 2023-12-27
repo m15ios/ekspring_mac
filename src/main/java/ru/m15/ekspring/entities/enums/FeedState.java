@@ -5,6 +5,8 @@ public enum FeedState {
     INLINE,
     SAVED,
     IN_PARSE,
+    PARSED_LINKS,
+    PARSED_DATA,
     PARSED,
     FAILED,
     FINISH,

@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 import ru.m15.ekspring.entities.FeedLink;
 import ru.m15.ekspring.entities.JsonLink;
 import ru.m15.ekspring.entities.JsonLinks;
+import ru.m15.ekspring.entities.enums.FeedState;
 import ru.m15.ekspring.repositories.FeedLinkRepository;
 import ru.m15.ekspring.services.ParsingAndAnalyseService;
 import ru.m15.ekspring.services.StorageService;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -48,6 +50,10 @@ public class ParserLinksServiceImpl implements ParsingAndAnalyseService {
 
                     linkAnalyses.add(feedLink);
 
+//                    feedLink.setState( FeedState.INLINE );
+//                    feedLink.setCountAttempts( 0 );
+//                    feedLink.setLastDateAttempt( LocalDateTime.now() );
+//                    repository.save(feedLink);
                 }
 
             }
