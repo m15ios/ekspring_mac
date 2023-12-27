@@ -12,10 +12,13 @@ import ru.m15.ekspring.dto.RequestFeed;
 import ru.m15.ekspring.entities.FeedLink;
 import ru.m15.ekspring.entities.enums.FeedState;
 import ru.m15.ekspring.repositories.FeedLinkRepository;
+import ru.m15.ekspring.services.FeedsService;
 import ru.m15.ekspring.services.StorageService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 @Slf4j
@@ -25,6 +28,7 @@ public class GrabberServiceImpl {
 
     private final StorageService storage;
     private final FeedLinkRepository repository;
+    private final FeedsService feedsService;
 
     // add listener rabbit queue
     // todo to think about double reading from rabbit : ?raceCondition - setCountAttempts
@@ -36,14 +40,22 @@ public class GrabberServiceImpl {
         FeedLink feedLink = repository.findById( UUID.fromString( feedUUid ) )
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND) );
 
-        feedLink.setState( FeedState.INLINE );
-        feedLink.setCountAttempts( feedLink.getCountAttempts() + 1 );
-        feedLink.setLastDateAttempt( LocalDateTime.now() );
-        feedLink.setDurationDate( LocalDateTime.now().plusMinutes( 3 ) );
-        repository.save(feedLink);
+        var currentTime = LocalDateTime.now().toInstant(ZoneOffset.UTC);
+        if( feedLink.getDurationDate().toInstant(ZoneOffset.UTC).isBefore( currentTime ) ) {
+            feedLink.setState( FeedState.INLINE );
+            feedLink.setCountAttempts( feedLink.getCountAttempts() + 1 );
+            feedLink.setLastDateAttempt( LocalDateTime.now() );
+            feedLink.setDurationDate( LocalDateTime.now().plusMinutes( 3 ) );
+            repository.save(feedLink);
 
-        log.info( "GrabberServiceImpl feed url - " + feedLink.getUrlSource() );
-        downloadByUrlAndSave( feedLink );
+            log.info( "GrabberServiceImpl feed url - " + feedLink.getUrlSource() );
+            downloadByUrlAndSave( feedLink );
+
+        } else {
+            log.info( "GrabberServiceImpl skipped feed url - " + feedLink.getUrlSource() );
+            feedsService.sendMessageToRabbit( UUID.fromString( feedUUid ) );
+        }
+
     }
 
     private void downloadByUrlAndSave( FeedLink feedLink ){

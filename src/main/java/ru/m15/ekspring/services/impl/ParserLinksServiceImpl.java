@@ -48,12 +48,10 @@ public class ParserLinksServiceImpl implements ParsingAndAnalyseService {
                     repository.save( feedLink );
                     log.info( "\n\n\n\n ------------------- feedLink saved -------------- \n\n\n\n" );
 
+
+                    // to do - move this to the scheduler
                     linkAnalyses.add(feedLink);
 
-//                    feedLink.setState( FeedState.INLINE );
-//                    feedLink.setCountAttempts( 0 );
-//                    feedLink.setLastDateAttempt( LocalDateTime.now() );
-//                    repository.save(feedLink);
                 }
 
             }
@@ -71,7 +69,7 @@ public class ParserLinksServiceImpl implements ParsingAndAnalyseService {
         doc.select("a[href]").forEach( element -> {
             String title = element.text().trim();
             String href = element.attr("href").trim();
-            if( href.startsWith("/catalog/") ) {
+            if( href.startsWith("/catalog/") && !href.startsWith("http") ) {
                 // links by key is exist OR contains empty string
                 if( !links.containsKey(href) ){
                     links.put(href, new JsonLink(href,title,null,null) );

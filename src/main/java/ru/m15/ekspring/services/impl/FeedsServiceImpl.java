@@ -59,7 +59,8 @@ public class FeedsServiceImpl implements FeedsService {
             );
     }
 
-    private void sendMessageToRabbit(UUID message){
+    @Override
+    public void sendMessageToRabbit(UUID message){
         String routingKey = RabbitConfig.rabbitQueue;
         rabbitTemplate.convertAndSend(routingKey, message.toString());
     }
