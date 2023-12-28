@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.m15.ekspring.config.RabbitConfig;
 import ru.m15.ekspring.dto.RequestFeed;
 import ru.m15.ekspring.entities.FeedLink;
+import ru.m15.ekspring.entities.enums.ContentType;
 import ru.m15.ekspring.entities.enums.FeedState;
 import ru.m15.ekspring.repositories.FeedLinkRepository;
 import ru.m15.ekspring.services.FeedsService;
@@ -63,7 +64,7 @@ public class GrabberServiceImpl {
         try {
             String data = Jsoup.connect(url).get().html();
             UUID uid = UUID.randomUUID();
-            storage.saveData( uid, data );
+            storage.saveData( uid, data, ContentType.HTML );
             feedLink.setState( FeedState.SAVED );
             feedLink.setMinio( uid );
             repository.save(feedLink);
