@@ -12,5 +12,4 @@ public interface ParsingAndAnalyseService {
     void parsing( FeedLink feedLink );
     Map<String, JsonLink> parsing(String html );
 
-
 }

@@ -38,11 +38,14 @@ services:
 #    network_mode: host
     container_name: grafana-container
     restart: unless-stopped
+    user: '0'
     ports:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+#      - GF_SERVER_ROOT_URL=http://my.grafana.server/
+#      - GF_INSTALL_PLUGINS=grafana-clock-panel
     networks:
       - custom_network
 
