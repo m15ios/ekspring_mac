@@ -60,7 +60,8 @@ public class SchedulerServiceImpl {
             if( exitKey[0] == 1 ){
                 return;
             }
-            Pattern pattern1 = Pattern.compile ("item");
+            //Pattern pattern1 = Pattern.compile ("item");
+            Pattern pattern1 = Pattern.compile ("peugeot-3008");
             Matcher matcher1 = pattern1.matcher (feedItem.getUrlSource());
             if( matcher1.find() ) {
                 log.info("check for get good data " + feedItem.getUrlSource());

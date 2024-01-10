@@ -54,6 +54,10 @@ public class ParserLinksServiceImpl implements ParsingAndAnalyseService {
 
                 }
 
+            } else {
+                // TODO add different FAILED statuses
+                feedLink.setState( FeedState.FAILED );
+                repository.save( feedLink );
             }
         } else {
             log.error( "feedlink has nothing" );

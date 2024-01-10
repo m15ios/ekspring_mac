@@ -55,6 +55,20 @@ public class ParserDataServiceImpl {
     public void parsing( String html ) {
         log.info( "feedlink is parsing..." );
 
+        parsingAuto( html );
+    }
+
+    private void parsingAuto( String html ){
+
+        Document doc = Jsoup.parse( html );
+
+        String goodsTitle = this.getNode( doc.select("h1.oglasi-headline-model") );
+        log.info( "found " + goodsTitle );
+
+    }
+
+    private void parsingCheckroom( String html ){
+
         Document doc = Jsoup.parse( html );
 
         doc.select("div.props tr").forEach( element -> {
