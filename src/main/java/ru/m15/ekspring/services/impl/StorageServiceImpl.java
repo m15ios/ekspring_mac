@@ -49,16 +49,18 @@ public class StorageServiceImpl implements StorageService {
 
     private String makeName(UUID uuid, ContentType cType) {
         String base = uuid.toString();
-        switch (cType) {
-            case cType.HTML:
-                return base + ".html";
-            case cType.XML:
-                return base + ".xml";
-            case cType.JSON:
-                return base + ".json";
-            default:
-                return base;
-        }
+        // TODO will fix file extensions later
+        return base;
+//        switch (cType) {
+//            case cType.HTML:
+//                return base + ".html";
+//            case cType.XML:
+//                return base + ".xml";
+//            case cType.JSON:
+//                return base + ".json";
+//            default:
+//                return base;
+//        }
     }
 
     @Override

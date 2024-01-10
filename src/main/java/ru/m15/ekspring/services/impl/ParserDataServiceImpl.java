@@ -40,10 +40,13 @@ public class ParserDataServiceImpl {
             var eF = elements.first();
             if( eF != null ) {
                 String html = eF.html();
+                html = html.replaceAll( "<br>", "\n--" );
                 // TODO: Bad way!!!!
-                html = "<body>" + html.replaceAll( "<br>", "\n--" ) + "</body>";
-                Elements res = Jsoup.parse( html ).select("body");
-                return res.first().text().trim();
+                //html = "<body>" + html + "</body>";
+                //Elements res = Jsoup.parse( html ).select("body");
+                //return res.first().text().trim();
+                // TODO: second way
+                return html.replaceAll("\\<.*?\\>", "");
             }
         }
         return "";
@@ -69,6 +72,12 @@ public class ParserDataServiceImpl {
         String goodsTitle = this.getNode( doc.select("h1[itemprop]") );
         goodsTitle = goodsTitle.replace( goodsTitleExt, "" ).trim();
         log.info( "found " + goodsTitle );
+
+        String price = this.getNode( doc.select("div.price .value") );
+        price = price.replaceAll("[^0-9,.]", "");
+        // or if need only numbers
+        // price = price.replaceAll("\\D", "");
+        log.info( "found " + price );
 
     }
 }

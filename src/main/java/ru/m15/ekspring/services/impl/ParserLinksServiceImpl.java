@@ -69,7 +69,8 @@ public class ParserLinksServiceImpl implements ParsingAndAnalyseService {
         doc.select("a[href]").forEach( element -> {
             String title = element.text().trim();
             String href = element.attr("href").trim();
-            if( href.startsWith("/catalog/") && !href.startsWith("http") ) {
+            //if( href.startsWith("/automobili/") && !href.startsWith("http") ) {
+            if( href.indexOf("/automobili/") > 0 && !href.startsWith("http") && !href.startsWith("mailto") ) {
                 // links by key is exist OR contains empty string
                 if( !links.containsKey(href) ){
                     links.put(href, new JsonLink(href,title,null,null) );
