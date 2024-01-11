@@ -89,6 +89,7 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
+      - RABBITMQ_HOSTNAME=localhost
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=12345
     logging:

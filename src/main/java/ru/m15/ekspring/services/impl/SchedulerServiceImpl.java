@@ -11,6 +11,7 @@ import ru.m15.ekspring.entities.enums.FeedState;
 import ru.m15.ekspring.repositories.FeedLinkRepository;
 import ru.m15.ekspring.services.ParsingAndAnalyseService;
 import ru.m15.ekspring.services.StorageService;
+import ru.m15.ekspring.utils.RabbitMQUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -32,9 +33,22 @@ public class SchedulerServiceImpl {
 
     // cron attribute in app.yaml
     @Scheduled(cron = "${full-check-interval-in-cron}")
-    void checkFeedLinks() {
+    void checkFeedLinks() throws Exception {
         this.checkSaved();
         this.checkParsedLinks();
+
+        int rmqCnt = RabbitMQUtils.getCurrentQueueSize();
+        log.info( "\n\n--------- RabbitMQ has " + rmqCnt + " packages -------\n" );
+        if( rmqCnt == 0 ) {
+            this.checkInline();
+        }
+    }
+
+    private void checkInline(){
+        List<FeedLink> feedLinks = repository.findByState( FeedState.INLINE );
+        feedLinks.forEach( feedItem -> {
+            log.info( "checkFeedInline " + feedItem.getUrlSource() );
+        } );
     }
 
     private void checkSaved(){
