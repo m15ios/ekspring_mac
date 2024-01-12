@@ -1,15 +1,22 @@
 package ru.m15.ekspring.services.impl;
 
+import com.rabbitmq.client.Channel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.connection.Connection;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import ru.m15.ekspring.config.RabbitConfig;
 import ru.m15.ekspring.entities.FeedLink;
 import ru.m15.ekspring.entities.enums.FeedState;
 import ru.m15.ekspring.repositories.FeedLinkRepository;
+import ru.m15.ekspring.services.FeedsService;
 import ru.m15.ekspring.services.ParsingAndAnalyseService;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +32,8 @@ public class SchedulerServiceImpl {
     private final FeedLinkRepository repository;
     private final ParsingAndAnalyseService parserLinks;
     private final ParserDataServiceImpl parserData;
-    private final org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory;
+    private final RabbitTemplate rabbitTemplate;
+    private final ConnectionFactory connectionFactory; // started in AMPQ
 
     // cron attribute in app.yaml
     @Scheduled(cron = "${full-check-interval-in-cron}")
@@ -33,28 +41,40 @@ public class SchedulerServiceImpl {
         this.checkSaved();
         this.checkParsedLinks();
 
-        org.springframework.amqp.rabbit.connection.Connection connection = null;
-        com.rabbitmq.client.Channel channel = null;
+        int rmqCnt = countRabbitMessages();
+        log.info("\n\n--------- RabbitMQ has " + rmqCnt + " packages -------\n");
+        if (rmqCnt == 0) {
+            this.checkInline();
+        }
+
+    }
+
+
+    private int countRabbitMessages() throws Exception {
+        int result = -1;
+
+        Connection connection = null;
+        Channel channel = null;
 
         try {
             connection = connectionFactory.createConnection();
             channel = connection.createChannel(false);
-            int rmqCnt = (int) channel.messageCount(rabbitQueue);
-            log.info("\n\n--------- RabbitMQ has " + rmqCnt + " packages -------\n");
-            if (rmqCnt == 0) {
-                this.checkInline();
-            }
+            result = (int) channel.messageCount(rabbitQueue);
         } finally {
             if (channel != null) channel.close();
             if (connection != null) connection.close();
         }
 
+        return result;
     }
 
     private void checkInline() {
         List<FeedLink> feedLinks = repository.findByState(FeedState.INLINE);
         feedLinks.forEach(feedItem -> {
             log.info("checkFeedInline " + feedItem.getUrlSource());
+            //String routingKey = RabbitConfig.rabbitQueue;
+            //UUID message = feedItem.getId();
+            //rabbitTemplate.convertAndSend(routingKey, message.toString());
         });
     }
 
