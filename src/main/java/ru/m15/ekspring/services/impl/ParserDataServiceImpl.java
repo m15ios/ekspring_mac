@@ -65,6 +65,12 @@ public class ParserDataServiceImpl {
         String goodsTitle = this.getNode( doc.select("h1.oglasi-headline-model") );
         log.info( "found " + goodsTitle );
 
+        doc.select("div.oglasi-osnovne-informacije li").forEach( element -> {
+            String title = this.getNode( element.select("p") );
+            String value = this.getNode( element.select("span") );
+            log.info( "found " + title + " :: " + value );
+        });
+
     }
 
     private void parsingCheckroom( String html ){
@@ -74,7 +80,7 @@ public class ParserDataServiceImpl {
         doc.select("div.props tr").forEach( element -> {
             String title = this.getNode( element.select("td:nth-child(1)") );
             String value = this.getNode( element.select("td:nth-child(2)") );
-            log.info( "found " + title + "::" + value );
+            log.info( "found " + title + " :: " + value );
         });
 
         String descr = this.getNode( doc.select("div.descr_txt") );

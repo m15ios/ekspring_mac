@@ -68,6 +68,7 @@ public class SchedulerServiceImpl {
         return result;
     }
 
+    // return tails to rabbit
     private void checkInline() {
         List<FeedLink> feedLinks = repository.findByState(FeedState.INLINE);
         feedLinks.forEach(feedItem -> {
