@@ -1,13 +1,16 @@
 package ru.m15.ekspring.entities;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 @Slf4j
@@ -24,7 +27,27 @@ public class JsonLinks implements Serializable {
     }
 
     public JsonLinks( String jsonText ){
+        log.info("JsonLinks init from JSON string");
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonLink[] jsonLinks = objectMapper.readValue(jsonText, JsonLink[].class);
+            this.links = Arrays.asList(jsonLinks);
+            log.info("JsonLinks add " + this.links.size() + " elements" );
+            log.info( this.links.toString() );
+        } catch ( Exception e) {
+            log.error("Error parsing JSON string", e);
+        }
     }
+
+    public String toString(){
+        final String[] result = {"\r-------\r["};
+        this.links.forEach( (JsonLink jsonLink) -> {
+            log.info("JsonLink");
+            result[0] = result[0] + "\r\t" + jsonLink.toString();
+        } );
+        return result[0] + "]\r-------\n";
+    }
+
 
     public String createJson(){
         String result = "";

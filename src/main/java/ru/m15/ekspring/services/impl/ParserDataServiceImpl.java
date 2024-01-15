@@ -26,6 +26,12 @@ public class ParserDataServiceImpl {
     private final StorageService storageService;
 
     public void parsing(FeedLink feedLink) {
+
+        String links = feedLink.getLinks();
+        log.info( "\r\r\r-----------------\r" + links );
+        JsonLinks jsonLinks = new JsonLinks( links );
+        log.info( jsonLinks.toString() );
+
         UUID minioId = feedLink.getMinio();
         if( minioId != null ) {
             String html = storageService.loadData(feedLink.getMinio());

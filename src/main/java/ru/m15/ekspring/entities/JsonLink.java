@@ -18,4 +18,11 @@ public class JsonLink implements Serializable {
     String meta;
     String type;
 
+    public String toString2(){
+        return "\r{\r\tlink: " + this.link
+                + "\r\tbody: " + this.body
+                + "\r\tmeta: " + this.meta
+                + "\r\ttype: " + this.type + " }";
+
+    }
 }
