@@ -1,5 +1,6 @@
 package ru.m15.ekspring.entities;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
@@ -22,10 +23,10 @@ public class JsonRules implements Serializable {
     JsonRuleTitle title;
     JsonRuleProperties properties;
 
-//    public static MyObject fromJson(String json) throws Exception {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        return objectMapper.readValue(json, MyObject.class);
-//    }
+    public JsonRules (String json) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        //return objectMapper.readValue(json, MyObject.class);
+    }
 //
 //    public String toJson() throws Exception {
 //        ObjectMapper objectMapper = new ObjectMapper();

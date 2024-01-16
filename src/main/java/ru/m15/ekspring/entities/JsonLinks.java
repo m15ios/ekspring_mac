@@ -32,7 +32,7 @@ public class JsonLinks implements Serializable {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonLink[] jsonLinks = objectMapper.readValue(jsonText, JsonLink[].class);
             this.links = Arrays.asList(jsonLinks);
-            log.info("JsonLinks add " + this.links.size() + " elements" );
+            //log.info("JsonLinks add " + this.links.size() + " elements" );
             log.info( this.links.toString() );
         } catch ( Exception e) {
             log.error("Error parsing JSON string", e);
@@ -40,12 +40,11 @@ public class JsonLinks implements Serializable {
     }
 
     public String toString(){
-        final String[] result = {"\r-------\r["};
+        final String[] result = {"\n-------\n["};
         this.links.forEach( (JsonLink jsonLink) -> {
-            log.info("JsonLink");
-            result[0] = result[0] + "\r\t" + jsonLink.toString();
+            result[0] = result[0] + "\t" + jsonLink.toString();
         } );
-        return result[0] + "]\r-------\n";
+        return result[0] + "]\n-------\n";
     }
 
 
