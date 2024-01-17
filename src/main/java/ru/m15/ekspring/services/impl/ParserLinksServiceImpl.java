@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import ru.m15.ekspring.entities.FeedLink;
 import ru.m15.ekspring.entities.JsonLink;
 import ru.m15.ekspring.entities.JsonLinks;
+import ru.m15.ekspring.entities.JsonRules;
 import ru.m15.ekspring.entities.enums.FeedState;
 import ru.m15.ekspring.repositories.FeedLinkRepository;
+import ru.m15.ekspring.repositories.RulesRepository;
 import ru.m15.ekspring.services.ParsingAndAnalyseService;
 import ru.m15.ekspring.services.StorageService;
 
@@ -26,10 +28,11 @@ import java.util.regex.Pattern;
 public class ParserLinksServiceImpl implements ParsingAndAnalyseService {
 
     private final StorageService storageService;
-    private final FeedLinkRepository repository;
-
+    private final FeedLinkRepository repositoryFL;
     private final LinkAnalysesImpl linkAnalyses;
 
+//    private final RulesRepository repositoryR;
+//    private JsonRules rules;
 
     @Override
     public void parsing(FeedLink feedLink) {
@@ -45,7 +48,7 @@ public class ParserLinksServiceImpl implements ParsingAndAnalyseService {
 
                 if( !jsonString.isBlank() ){
                     feedLink.setLinks( jsonString );
-                    repository.save( feedLink );
+                    repositoryFL.save( feedLink );
                     log.info( "\n\n\n\n ------------------- feedLink saved -------------- \n\n\n\n" );
 
 
@@ -57,7 +60,7 @@ public class ParserLinksServiceImpl implements ParsingAndAnalyseService {
             } else {
                 // TODO add different FAILED statuses
                 feedLink.setState( FeedState.FAILED );
-                repository.save( feedLink );
+                repositoryFL.save( feedLink );
             }
         } else {
             log.error( "feedlink has nothing" );

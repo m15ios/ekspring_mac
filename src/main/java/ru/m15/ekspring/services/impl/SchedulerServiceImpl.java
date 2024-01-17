@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.m15.ekspring.config.RabbitConfig;
 import ru.m15.ekspring.entities.FeedLink;
+import ru.m15.ekspring.entities.JsonRules;
 import ru.m15.ekspring.entities.enums.FeedState;
 import ru.m15.ekspring.repositories.FeedLinkRepository;
 import ru.m15.ekspring.services.FeedsService;
@@ -46,7 +47,6 @@ public class SchedulerServiceImpl {
         if (rmqCnt == 0) {
             this.checkInline();
         }
-
     }
 
 
@@ -107,7 +107,11 @@ public class SchedulerServiceImpl {
             Matcher matcher1 = pattern1.matcher(feedItem.getUrlSource());
             if (matcher1.find()) {
                 log.info("check for get good data " + feedItem.getUrlSource());
-                parserData.parsing(feedItem);
+                try {
+                    parserData.parsing(feedItem);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 exitKey[0] = 1;
             }
         });

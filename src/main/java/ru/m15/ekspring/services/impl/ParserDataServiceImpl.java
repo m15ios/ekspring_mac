@@ -7,14 +7,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-import ru.m15.ekspring.entities.FeedLink;
-import ru.m15.ekspring.entities.JsonLink;
-import ru.m15.ekspring.entities.JsonLinks;
+import ru.m15.ekspring.entities.*;
 import ru.m15.ekspring.repositories.FeedLinkRepository;
+import ru.m15.ekspring.repositories.RulesRepository;
 import ru.m15.ekspring.services.ParsingAndAnalyseService;
 import ru.m15.ekspring.services.StorageService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,7 +25,11 @@ public class ParserDataServiceImpl {
 
     private final StorageService storageService;
 
-    public void parsing(FeedLink feedLink) {
+    private final RulesRepository repositoryR;
+    private JsonRules rules;
+
+
+    public void parsing(FeedLink feedLink) throws Exception {
 
         String links = feedLink.getLinks();
         log.info( "\r\r\r-----------------\r" + links );
@@ -58,8 +62,15 @@ public class ParserDataServiceImpl {
         return "";
     }
 
-    public void parsing( String html ) {
+    public void parsing( String html ) throws Exception {
         log.info( "feedlink is parsing..." );
+
+        log.info( "\n\n\n getting rules..." );
+        Rules rules = repositoryR.findByUrl( "autodiler.me" );
+        log.info( rules.toString() );
+        JsonRules jsonRules = new JsonRules( rules.getData() );
+        log.info( jsonRules.toString() );
+        log.info( "\n\n\nend rules..." );
 
         parsingAuto( html );
     }
