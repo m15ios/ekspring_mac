@@ -12,6 +12,7 @@ import ru.m15.ekspring.repositories.FeedLinkRepository;
 import ru.m15.ekspring.repositories.RulesRepository;
 import ru.m15.ekspring.services.ParsingAndAnalyseService;
 import ru.m15.ekspring.services.StorageService;
+import ru.m15.ekspring.utils.Strings;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,7 @@ public class ParserDataServiceImpl {
 
         UUID minioId = feedLink.getMinio();
         if( minioId != null ) {
+            this.setRulesFrom( feedLink.getUrlSource() );
             String html = storageService.loadData(feedLink.getMinio());
             this.parsing(html);
         } else {
@@ -62,29 +64,37 @@ public class ParserDataServiceImpl {
         return "";
     }
 
-    public void parsing( String html ) throws Exception {
+    private void setRulesFrom( String urlSource ) throws Exception {
+        log.info( "\n\n\nsetRulesFrom " + urlSource );
+        String key = Strings.getKeyByUrl( urlSource );
+        if( key != "" ){
+            log.info( "getting rules... " + key );
+            Rules rules = repositoryR.findByUrl( key );
+            log.info( rules.toString() );
+            this.rules = new JsonRules( rules.getData() );
+            log.info( this.rules.toString() );
+            log.info( "end rules...\n\n" );
+        }
+    }
+
+    public void parsing( String html ) {
         log.info( "feedlink is parsing..." );
 
-        log.info( "\n\n\n getting rules..." );
-        Rules rules = repositoryR.findByUrl( "autodiler.me" );
-        log.info( rules.toString() );
-        JsonRules jsonRules = new JsonRules( rules.getData() );
-        log.info( jsonRules.toString() );
-        log.info( "\n\n\nend rules..." );
-
-        parsingAuto( html );
+        if( this.rules != null ){
+            parsingAuto( html );
+        }
     }
 
     private void parsingAuto( String html ){
 
         Document doc = Jsoup.parse( html );
 
-        String goodsTitle = this.getNode( doc.select("h1.oglasi-headline-model") );
+        String goodsTitle = this.getNode( doc.select(this.rules.getTitle().getDocPath()) );
         log.info( "found " + goodsTitle );
 
-        doc.select("div.oglasi-osnovne-informacije li").forEach( element -> {
-            String title = this.getNode( element.select("p") );
-            String value = this.getNode( element.select("span") );
+        doc.select(this.rules.getProperties().getDocPath()).forEach( element -> {
+            String title = this.getNode( element.select(this.rules.getProperties().getName()) );
+            String value = this.getNode( element.select(this.rules.getProperties().getValue()) );
             log.info( "found " + title + " :: " + value );
         });
 
