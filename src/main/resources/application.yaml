@@ -10,14 +10,16 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://db:5432/ekspg
+#    url: jdbc:postgresql://db:5432/ekspg
+    url: jdbc:postgresql://host.docker.internal:5432/ekspg
     username: eku01
     password: tnG4-gr6D
     driver-class-name: org.postgresql.Driver
 
   flyway:
     baselineOnMigrate: true
-    url: jdbc:postgresql://db:5432/ekspg
+#    url: jdbc:postgresql://db:5432/ekspg
+    url: jdbc:postgresql://host.docker.internal:5432/ekspg
     user: eku01
     password: tnG4-gr6D
     driver-class-name: org.postgresql.Driver
@@ -30,12 +32,14 @@ spring:
   rabbitmq:
     username: admin
     password: 12345
-    host: rabbitmq
+#    host: rabbitmq
+    host: host.docker.internal
     port: 5672
 
 
 minio:
-  endpoint: http://minio:9000
+#  endpoint: http://minio:9000
+  endpoint: http://host.docker.internal:9000
   accessKey: minioadmin
   secretKey: minioadmin
 

@@ -2,68 +2,6 @@ version: '3.7'
 
 services:
 
-
-  db:
-#    image: postgres:16.1
-    build:
-      context: ./database/init
-      dockerfile: Dockerfile
-    command: postgres -c 'max_connections=2000'
-    volumes:
-      - ./database/data:/var/lib/postgresql/data
-      #- ./database/init/tests.sql:/docker-entrypoint-initdb.d/tests.sql
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: ekspg
-      POSTGRES_USER: eku01
-      POSTGRES_PASSWORD: tnG4-gr6D
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U eku01 -d ekspg | grep -w 'accepting connections' || exit 1"]
-      interval: 10s
-      timeout: 3s
-      retries: 10
-      start_period: 5s
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
-    networks:
-      - custom_network
-
-
-
-  grafana:
-    build: 'config/grafana'
-#    network_mode: host
-    container_name: grafana-container
-    restart: unless-stopped
-    user: '0'
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-#      - GF_SERVER_ROOT_URL=http://my.grafana.server/
-#      - GF_INSTALL_PLUGINS=grafana-clock-panel
-    networks:
-      - custom_network
-
-
-  prometheus:
-    image: prom/prometheus
-#    network_mode: host
-    container_name: prometheus-container
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus:/etc/prometheus/
-      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
-    restart: always
-    networks:
-      - custom_network
-
-
   app:
     build:
       context: ./..
@@ -72,55 +10,15 @@ services:
     container_name: app-container
     ports:
       - "8102:8102"
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - custom_network
+    extra_hosts:
+      - host.docker.internal:host-gateway
+      # use host.docker.internal in app.yaml
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#    networks:
+#      - custom_network
 
-
-  rabbitmq:
-    image: rabbitmq:3-management
-#    volumes:
-#      - ./brokers/rabbitmq/data:/var/lib/rabbitmq
-#      - ./brokers/rabbitmq/logs:/var/log/rabbitmq
-#      - ./brokers/rabbitmq/config:/etc/rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      - RABBITMQ_HOSTNAME=localhost
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=12345
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
-    networks:
-      - custom_network
-
-
-  minio:
-    image: minio/minio:latest
-    command: server --console-address ":9001" /data/
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: Admin
-      MINIO_ROOT_PASSWORD: Admin12345
-    volumes:
-      - ./s3/minio/data:/data
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
-      interval: 30s
-      timeout: 20s
-      retries: 3
-    networks:
-      - custom_network
-
-
-
-networks:
-  custom_network:
-    driver: bridge
+#networks:
+#  custom_network:
+#    driver: bridge
