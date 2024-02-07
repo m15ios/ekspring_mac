@@ -22,6 +22,16 @@ spring:
     driver-class-name: org.postgresql.Driver
     locations: classpath:db/migration
 
+  #common setting for ampq protocol (rabbit and kafka)
+  jms:
+    pub-sub-domain: true
+
+  rabbitmq:
+    username: admin
+    password: 12345
+    #    host: rabbitmq
+    host: host.docker.internal
+    port: 5672
 
 # actuator
 info:
@@ -46,3 +56,10 @@ management:
       exposure:
         include: info,health,prometheus
 
+minio:
+  #  endpoint: http://minio:9000
+  endpoint: http://host.docker.internal:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+
+full-check-interval-in-cron: 59 * * * * *
