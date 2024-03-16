@@ -11,3 +11,49 @@ FROM openjdk:21
 # path make from -context from docker-compose
 ADD target/ekspring-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
+
+
+#ARG jar-directory=ekspring_mac
+#WORKDIR /app
+#RUN mkdir ${jar-directory}
+#
+#COPY ./mvnw .
+#COPY ./.mvn .mvn
+#COPY ./pom.xml .
+#
+#COPY ./${jar-directory}/pom.xml ${jar-directory}
+#COPY ./${jar-directory}/src ${jar-directory}/src
+#
+#RUN --mount=type=cache,target=/root/.m2 ./mvnw install -DskipTests
+#
+#FROM openjdk:21
+#VOLUME /tmp
+#
+#WORKDIR /build/${jar-directory}
+#ARG JAR_FILE=/profile/${jar-directory}/target/${jar-directory}-0.0.1-SNAPSHOT.jar
+#COPY --from=builder ${JAR_FILE} ./${jar-directory}.jar
+#
+#EXPOSE [PORT]
+
+
+## Используем базовый образ с Java
+#FROM maven:3.9.6 AS build
+#
+## Устанавливаем рабочую директорию
+#WORKDIR /app
+#
+## Копируем файлы проекта в контейнер
+#COPY pom.xml .
+#COPY src ./src
+#
+## Собираем проект с помощью Maven
+#RUN mvn clean install -DskipTests
+#
+## Второй этап сборки
+#FROM openjdk:20
+#
+## Копируем собранный JAR файл из предыдущего этапа
+#COPY --from=build /app/target/*.jar /app/app.jar
+#
+## Запускаем приложение
+#CMD ["java", "-jar", "/app/app.jar"]
